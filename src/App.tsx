@@ -1,34 +1,44 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-
+import AvatarMusic from './components/AvatarMusic'
+import BasePlaying from './components/BasePlaying'
+import BaseHeader from './components/BaseHeader'
+import ListMusic from './components/ListMusic'
+import { ListSongs } from './context'
+import './styles/Layout.css'
+import DataSongs from './data/songs.json'
+import 'react-h5-audio-player/lib/styles.css'
+import { useEffect, useState } from 'react'
+import InterfaceSong from './interface/InterfaceSong'
 function App() {
-  const [count, setCount] = useState(0)
+  const [song, setSong] = useState<InterfaceSong>(DataSongs[0])
+  const [idSong, setIdSong] = useState(0)
+  const getDataMusic = (data: InterfaceSong) => {
+    setSong(data)
+  }
+
+  const handleClick = () => {
+    if (song) {
+      const isPlaying = DataSongs.findIndex((item) => item.id == song.id) + 1
+      setIdSong(isPlaying)
+    }
+  }
+
+  useEffect(() => {
+    const detailSong = DataSongs.find((item) => item.id == idSong)
+    if (detailSong) setSong(detailSong)
+    console.log(song)
+  }, [idSong])
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div className='bg-[#e6effa] min-h-screen'>
+      <ListSongs.Provider value={{ listSongs: DataSongs }}>
+        <BaseHeader />
+        <div className='lg:grid lg:grid-cols-3 content'>
+          <AvatarMusic />
+          <ListMusic getSrcMusic={getDataMusic} />
+        </div>
+        <BasePlaying data={song} clickNext={handleClick} />
+      </ListSongs.Provider>
+    </div>
   )
 }
 
