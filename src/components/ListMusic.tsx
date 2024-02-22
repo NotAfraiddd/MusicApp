@@ -1,16 +1,13 @@
-import { useContext, useState } from 'react'
 import { download } from '../assets'
-import { ListSongs } from '../context'
 import InterfaceMusic from '../interface/InterfaceMusic'
 import InterfaceSong from '../interface/InterfaceSong'
 
-export default function ListMusic({ getSrcMusic }: InterfaceMusic) {
-  const { listSongs } = useContext(ListSongs)
-  const [idSong, setIdSong] = useState(0)
+export default function ListMusic({ songId, dataMusic, getSrcMusic }: InterfaceMusic) {
+  /**
+   * choose song
+   * @param song
+   */
   const handleClickPlaying = (song: InterfaceSong) => {
-    if (song && song.id) {
-      setIdSong(song.id)
-    }
     if (getSrcMusic) getSrcMusic(song)
   }
   return (
@@ -27,11 +24,11 @@ export default function ListMusic({ getSrcMusic }: InterfaceMusic) {
           </tr>
         </thead>
         <tbody className='overflow-hidden overflow-y-auto'>
-          {listSongs.map((item, index) => (
+          {dataMusic.map((item, index) => (
             <tr
               key={index}
               className={`h-12 mt-2  hover:bg-slate-500 hover:text-[#38bdf8] cursor-pointer ${
-                idSong == item.id ? 'text-green-400' : 'text-slate-300'
+                songId == item.id ? 'text-green-400' : 'text-slate-300'
               }`}
               onClick={() => handleClickPlaying(item)} // using callback when having argument
             >

@@ -1,6 +1,5 @@
+import InterfaceSong from './InterfaceSong'
+
 export default interface InterfaceAvatarMusic {
-  avatar: string
-  avatarSub: string
-  nameSong: string
-  nameAuthor: string
+  data: InterfaceSong
 }
